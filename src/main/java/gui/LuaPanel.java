@@ -1,5 +1,7 @@
 package gui;
 
+import interpreter.LuaParser;
+
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -14,8 +16,25 @@ public class LuaPanel {
     private JLabel inputsLabel;
     private JLabel outputsLabel;
     private JButton fileButton;
+    private final LuaParser luaParser = new LuaParser();
 
     public LuaPanel() {
+        /*getResultsButton.addActionListener(e -> {
+            String input = luaInputs.getText();
+            luaInputs.setText("");
+            String output = luaParser.parseCommands(input);
+            printResults.append(output);
+        });*/
+
+        /*fileButton.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.showOpenDialog(rootPanel);
+            File file = fileChooser.getSelectedFile();
+            if (file != null) {
+                String status = luaParser.parseAndRunFile(file.toString());
+                printResults.append(output);
+            }
+        });*/
     }
 
     public static void main(String[] args) {
@@ -23,12 +42,12 @@ public class LuaPanel {
         LuaPanel luaPanel = new LuaPanel();
         frame.setContentPane(luaPanel.rootPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        /*frame.addWindowListener(new WindowAdapter() {
+        frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                luaPanel.inputProcesser.closeLua();
+                luaPanel.luaParser.closeLua();
             }
-        });*/
+        });
         frame.pack();
         frame.setVisible(true);
     }
