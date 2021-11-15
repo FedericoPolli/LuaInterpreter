@@ -29,7 +29,9 @@ public class LuaParser {
     }
 
     public int parseAndRunCommands(String input) {
-        return input.lines().mapToInt(this::parseAndRunCommand).sum();
+        int output = input.lines().mapToInt(this::parseAndRunCommand).sum();
+        luaLibrary.lua_settop(L, 0);
+        return output;
     }
 
     private int parseAndRunCommand(String line){
@@ -62,6 +64,10 @@ public class LuaParser {
 
     private int runLoadedChunk(){
         return luaLibrary.lua_pcallk(L, 0, -1, 0, 0, null);
+    }
+
+    public boolean isStackEmpty(){
+        return luaLibrary.lua_gettop(L) == 0;
     }
 
     public void closeLua() {

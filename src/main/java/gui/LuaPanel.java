@@ -19,22 +19,22 @@ public class LuaPanel {
     private final LuaParser luaParser = new LuaParser();
 
     public LuaPanel() {
-        /*getResultsButton.addActionListener(e -> {
+        getResultsButton.addActionListener(e -> {
             String input = luaInputs.getText();
             luaInputs.setText("");
-            String output = luaParser.parseCommands(input);
-            printResults.append(output);
-        });*/
+            int status = luaParser.parseAndRunCommands(input);
+            printResults.append(String.valueOf(status));
+        });
 
-        /*fileButton.addActionListener(e -> {
+        fileButton.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.showOpenDialog(rootPanel);
             File file = fileChooser.getSelectedFile();
             if (file != null) {
-                String status = luaParser.parseAndRunFile(file.toString());
-                printResults.append(output);
+                int status = luaParser.parseAndRunFile(file.toString());
+                printResults.append(String.valueOf(status));
             }
-        });*/
+        });
     }
 
     public static void main(String[] args) {
