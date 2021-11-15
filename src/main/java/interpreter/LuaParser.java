@@ -9,6 +9,9 @@ import java.util.stream.Collectors;
 import static java.lang.System.lineSeparator;
 import static java.lang.System.out;
 
+//try to run on windows
+//redirect output
+//minor: allow more lines to be run
 //frontend da console
 //test end to end
 
