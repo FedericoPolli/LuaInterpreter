@@ -35,4 +35,11 @@ class LuaParserTest {
         String command = "a=1hg2";
         assertEquals(1, luaParser.parseAndRunCommand(command));
     }
+
+    @Test
+    void addReturn(){
+        LuaParser luaParser = new LuaParser();
+        String command = "12";
+        assertEquals(0, luaParser.parseAndRunCommand(command));
+    }
 }

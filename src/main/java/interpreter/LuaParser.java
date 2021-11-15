@@ -28,13 +28,26 @@ public class LuaParser {
         return 0;
     }
 
-    public int parseAndRunCommand(String input){
-        if (luaLibrary.luaL_loadbufferx(L, input, input.length(), "line", null) !=0 ||
+    public int parseAndRunCommand(String line){
+        String retLine = addReturn(line);
+        if (luaLibrary.luaL_loadbufferx(L, retLine, retLine.length(), "line", null) !=0 ||
                 runLoadedChunk() !=0) {
             getAndPopLuaError();
             return 1;
         }
         return 0;
+    }
+
+    private String addReturn(String line) {
+        String retLine = "return " + line;
+        if (luaLibrary.luaL_loadbufferx(L, retLine, retLine.length(), "line", null) == 0) {
+            luaLibrary.lua_settop(L, -2);
+            return retLine;
+        }
+        else {
+            luaLibrary.lua_settop(L, -2);
+            return line;
+        }
     }
 
     private void runCommand(String line) {
