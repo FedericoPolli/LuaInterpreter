@@ -21,4 +21,18 @@ class LuaParserTest {
         int status = luaParser.parseAndRunFile(file);
         assertEquals(0, status);
     }
+
+    @Test
+    void parseCommand(){
+        LuaParser luaParser = new LuaParser();
+        String command = "a=12";
+        assertEquals(0, luaParser.parseAndRunCommand(command));
+    }
+
+    @Test
+    void parseWrongCommand(){
+        LuaParser luaParser = new LuaParser();
+        String command = "a=1hg2";
+        assertEquals(1, luaParser.parseAndRunCommand(command));
+    }
 }

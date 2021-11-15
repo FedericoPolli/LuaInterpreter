@@ -3,6 +3,12 @@ package interpreter;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.lang.System.lineSeparator;
+import static java.lang.System.out;
+
 //frontend da console
 //test end to end
 
@@ -22,14 +28,23 @@ public class LuaParser {
         return 0;
     }
 
+    public int parseAndRunCommand(String input){
+        if (luaLibrary.luaL_loadbufferx(L, input, input.length(), "line", null) !=0 ||
+                runLoadedChunk() !=0) {
+            getAndPopLuaError();
+            return 1;
+        }
+        return 0;
+    }
+
+    private void runCommand(String line) {
+
+    }
+
     private void getAndPopLuaError() {
         String error = luaLibrary.lua_tolstring(L, -1, null);
         System.out.println(error);
         luaLibrary.lua_settop(L, -2);
-    }
-
-    public void stackStatus(){
-
     }
 
     private int runLoadedChunk(){
