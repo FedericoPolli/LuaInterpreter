@@ -28,7 +28,11 @@ public class LuaParser {
         return 0;
     }
 
-    public int parseAndRunCommand(String line){
+    public int parseAndRunCommands(String input) {
+        return input.lines().mapToInt(this::parseAndRunCommand).sum();
+    }
+
+    private int parseAndRunCommand(String line){
         String retLine = addReturn(line);
         if (luaLibrary.luaL_loadbufferx(L, retLine, retLine.length(), "line", null) !=0 ||
                 runLoadedChunk() !=0) {
@@ -48,10 +52,6 @@ public class LuaParser {
             luaLibrary.lua_settop(L, -2);
             return line;
         }
-    }
-
-    private void runCommand(String line) {
-
     }
 
     private void getAndPopLuaError() {

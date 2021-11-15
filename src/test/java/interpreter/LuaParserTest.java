@@ -26,20 +26,27 @@ class LuaParserTest {
     void parseCommand(){
         LuaParser luaParser = new LuaParser();
         String command = "a=12";
-        assertEquals(0, luaParser.parseAndRunCommand(command));
+        assertEquals(0, luaParser.parseAndRunCommands(command));
     }
 
     @Test
     void parseWrongCommand(){
         LuaParser luaParser = new LuaParser();
         String command = "a=1hg2";
-        assertEquals(1, luaParser.parseAndRunCommand(command));
+        assertEquals(1, luaParser.parseAndRunCommands(command));
     }
 
     @Test
-    void addReturn(){
+    void parseCommandByAddingReturn(){
         LuaParser luaParser = new LuaParser();
         String command = "12";
-        assertEquals(0, luaParser.parseAndRunCommand(command));
+        assertEquals(0, luaParser.parseAndRunCommands(command));
+    }
+
+    @Test
+    void parseTwoCommands(){
+        LuaParser luaParser = new LuaParser();
+        String command = "a=12"+System.lineSeparator()+"a*a";
+        assertEquals(0, luaParser.parseAndRunCommands(command));
     }
 }
