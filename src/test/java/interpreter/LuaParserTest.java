@@ -88,4 +88,14 @@ class LuaParserTest {
                 () -> assertTrue(luaParser.parseAndRunCommands(command).contains(error2)),
                 () -> assertTrue(luaParser.isStackEmpty())
         );    }
+
+    @Test
+    void checkOrderOfResults(){
+        LuaParser luaParser = new LuaParser();
+        String command = "1,2,3,4,5,6";
+        String output = "1, 2, 3, 4, 5, 6";
+        assertAll(
+                () -> assertEquals(output, luaParser.parseAndRunCommands(command)),
+                () -> assertTrue(luaParser.isStackEmpty())
+        );    }
 }
