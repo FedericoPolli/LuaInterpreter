@@ -21,4 +21,8 @@ public interface LuaLibrary extends Library {
     int lua_gettop(Pointer l);
     void lua_settop(Pointer l, int index);  //lua_pop(L,n) = lua_settop(L, -n-1)
     boolean lua_isnumber(Pointer l, int i);
+
+    void lua_setglobal(Pointer l, String print);
+
+    void lua_pushcclosure(Pointer l, String my_print, int n);
 }

@@ -7,12 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static java.lang.System.lineSeparator;
-
 //try to run on windows
 //redirect output
 //minor: allow more lines to be run
-//frontend da console
 //test end to end
 
 public class LuaParser {
@@ -21,6 +18,21 @@ public class LuaParser {
 
     public LuaParser() {
         luaLibrary.luaL_openlibs(L);
+        redefinePrint();
+    }
+
+    private void redefinePrint() {
+        luaLibrary.lua_pushcclosure(L, null, 0);
+        luaLibrary.lua_setglobal(L, "print");
+    }
+
+
+    public void closeLua() {
+        luaLibrary.lua_close(L);
+    }
+
+    public boolean isStackEmpty(){
+        return luaLibrary.lua_gettop(L) == 0;
     }
 
     public String parseAndRunFile(String file) {
@@ -77,13 +89,5 @@ public class LuaParser {
 
     private int runLoadedChunk(){
         return luaLibrary.lua_pcallk(L, 0, -1, 0, 0, null);
-    }
-
-    public boolean isStackEmpty(){
-        return luaLibrary.lua_gettop(L) == 0;
-    }
-
-    public void closeLua() {
-        luaLibrary.lua_close(L);
     }
 }
