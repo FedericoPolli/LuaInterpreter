@@ -24,5 +24,5 @@ public interface LuaLibrary extends Library {
 
     void lua_setglobal(Pointer l, String print);
 
-    void lua_pushcclosure(Pointer l, String my_print, int n);
+    void lua_pushcclosure(Pointer l, Pointer CFunction, int n);
 }
