@@ -9,10 +9,15 @@ public class LuaConsole {
     public static void main(String[] args) {
         LuaParser luaParser = new LuaParser();
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter lua command");
-        while (scanner.hasNext()) {
-            String input = scanner.next();
-            System.out.println(luaParser.parseAndRunCommands(input));
-        }
+        System.out.println("Starting Lua, press q to quit");
+        do {
+        System.out.print("> ");
+        String input = scanner.nextLine();
+        if (input.equals("q"))
+            break;
+        String output = luaParser.parseAndRunCommands(input);
+        if (!output.equals(""))
+            System.out.println(output);
+        } while (true);
     }
 }
