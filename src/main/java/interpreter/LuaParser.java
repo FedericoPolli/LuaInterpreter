@@ -3,11 +3,11 @@ package interpreter;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.lang.System.lineSeparator;
-import static java.lang.System.out;
 
 //try to run on windows
 //redirect output
@@ -23,28 +23,38 @@ public class LuaParser {
         luaLibrary.luaL_openlibs(L);
     }
 
-    public int parseAndRunFile(String file) {
+    public String parseAndRunFile(String file) {
         if (luaLibrary.luaL_loadfilex(L, file, null) != 0 || runLoadedChunk() != 0){
-            getAndPopLuaError();
-            return 1;
+            return getAndPopLuaError();
         }
-        return 0;
+        return getResults();
     }
 
-    public int parseAndRunCommands(String input) {
-        int output = input.lines().mapToInt(this::parseAndRunCommand).sum();
-        luaLibrary.lua_settop(L, 0);
-        return output;
+    public String parseAndRunCommands(String input) {
+        return input.lines().map(this::parseAndRunCommand).collect(Collectors.joining());
     }
 
-    private int parseAndRunCommand(String line){
+    private String parseAndRunCommand(String line){
         String retLine = addReturn(line);
         if (luaLibrary.luaL_loadbufferx(L, retLine, retLine.length(), "line", null) !=0 ||
                 runLoadedChunk() !=0) {
-            getAndPopLuaError();
-            return 1;
+            return getAndPopLuaError();
         }
-        return 0;
+        return getResults();
+    }
+
+    private String getResults() {
+        List<String> results = new ArrayList<>();
+        int stackSize = luaLibrary.lua_gettop(L);
+        for (int i = 1; i <= stackSize; i++)
+            results.add(luaLibrary.lua_tolstring(L, -stackSize+i-1, null));
+        luaLibrary.lua_settop(L, 0);
+        if (results.size() ==0)
+            return "";
+        else{
+            String formattedResults = results.stream().map(result -> result + ", ").collect(Collectors.joining());
+            return formattedResults.substring(0, formattedResults.length()-2);
+        }
     }
 
     private String addReturn(String line) {
@@ -59,10 +69,10 @@ public class LuaParser {
         }
     }
 
-    private void getAndPopLuaError() {
+    private String getAndPopLuaError() {
         String error = luaLibrary.lua_tolstring(L, -1, null);
-        System.out.println(error);
         luaLibrary.lua_settop(L, -2);
+        return error;
     }
 
     private int runLoadedChunk(){

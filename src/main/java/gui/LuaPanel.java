@@ -22,8 +22,8 @@ public class LuaPanel {
         getResultsButton.addActionListener(e -> {
             String input = luaInputs.getText();
             luaInputs.setText("");
-            int status = luaParser.parseAndRunCommands(input);
-            printResults.append(String.valueOf(status));
+            String output = luaParser.parseAndRunCommands(input);
+            printResults.append(output);
         });
 
         fileButton.addActionListener(e -> {
@@ -31,8 +31,8 @@ public class LuaPanel {
             fileChooser.showOpenDialog(rootPanel);
             File file = fileChooser.getSelectedFile();
             if (file != null) {
-                int status = luaParser.parseAndRunFile(file.toString());
-                printResults.append(String.valueOf(status));
+                String output = luaParser.parseAndRunFile(file.toString());
+                printResults.append(output);
             }
         });
     }

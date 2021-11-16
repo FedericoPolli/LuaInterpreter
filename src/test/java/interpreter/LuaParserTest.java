@@ -10,9 +10,10 @@ class LuaParserTest {
     void parseNonLuaFile(){
         LuaParser luaParser = new LuaParser();
         String file = "/media/sf_Federico/Units/Quinto Anno/Tirocinio/Code/Java/LuaInterpreter/src/test/resources/random.py";
-        int status = luaParser.parseAndRunFile(file);
+        String output = luaParser.parseAndRunFile(file);
+        String error = "unexpected symbol near '['";
         assertAll(
-                () -> assertEquals(1, status),
+                () -> assertTrue(output.contains(error)),
                 () -> assertTrue(luaParser.isStackEmpty())
         );
     }
@@ -21,9 +22,9 @@ class LuaParserTest {
     void parseExistingFile(){
         LuaParser luaParser = new LuaParser();
         String file = "/media/sf_Federico/Units/Quinto Anno/Tirocinio/Code/Java/LuaInterpreter/src/test/resources/luaScripts/helloscript.lua";
-        int status = luaParser.parseAndRunFile(file);
+        String output = luaParser.parseAndRunFile(file);
         assertAll(
-                () -> assertEquals(0, status),
+                () -> assertEquals("", output),
                 () -> assertTrue(luaParser.isStackEmpty())
         );
     }
@@ -33,7 +34,7 @@ class LuaParserTest {
         LuaParser luaParser = new LuaParser();
         String command = "a=12";
         assertAll(
-                () -> assertEquals(0, luaParser.parseAndRunCommands(command)),
+                () -> assertEquals("", luaParser.parseAndRunCommands(command)),
                 () -> assertTrue(luaParser.isStackEmpty())
         );
     }
@@ -42,8 +43,9 @@ class LuaParserTest {
     void parseWrongCommand(){
         LuaParser luaParser = new LuaParser();
         String command = "a=1hg2";
+        String error = "malformed number near '1h'";
         assertAll(
-                () -> assertEquals(1, luaParser.parseAndRunCommands(command)),
+                () -> assertTrue(luaParser.parseAndRunCommands(command).contains(error)),
                 () -> assertTrue(luaParser.isStackEmpty())
         );    }
 
@@ -52,7 +54,7 @@ class LuaParserTest {
         LuaParser luaParser = new LuaParser();
         String command = "12";
         assertAll(
-                () -> assertEquals(0, luaParser.parseAndRunCommands(command)),
+                () -> assertEquals(command, luaParser.parseAndRunCommands(command)),
                 () -> assertTrue(luaParser.isStackEmpty())
         );    }
 
@@ -61,7 +63,7 @@ class LuaParserTest {
         LuaParser luaParser = new LuaParser();
         String command = "a=12"+System.lineSeparator()+"a*a";
         assertAll(
-                () -> assertEquals(0, luaParser.parseAndRunCommands(command)),
+                () -> assertEquals("144", luaParser.parseAndRunCommands(command)),
                 () -> assertTrue(luaParser.isStackEmpty())
         );    }
 
@@ -69,17 +71,21 @@ class LuaParserTest {
     void parseCorrectAndIncorrectCommands(){
         LuaParser luaParser = new LuaParser();
         String command = "a=12"+System.lineSeparator()+"a*/*a";
+        String error = "syntax error near '*'";
         assertAll(
-                () -> assertEquals(1, luaParser.parseAndRunCommands(command)),
+                () -> assertTrue(luaParser.parseAndRunCommands(command).contains(error)),
                 () -> assertTrue(luaParser.isStackEmpty())
         );    }
 
     @Test
     void parseOneCorrectAndTwoIncorrectCommands(){
         LuaParser luaParser = new LuaParser();
-        String command = "e=12dd" +System.lineSeparator() + "a=12"+System.lineSeparator()+"a*/*a";
+        String command = "e=1hg2" +System.lineSeparator() + "a=12"+System.lineSeparator()+"a*/*a";
+        String error1 = "malformed number near '1h'";
+        String error2 = "syntax error near '*'";
         assertAll(
-                () -> assertEquals(2, luaParser.parseAndRunCommands(command)),
+                () -> assertTrue(luaParser.parseAndRunCommands(command).contains(error1)),
+                () -> assertTrue(luaParser.parseAndRunCommands(command).contains(error2)),
                 () -> assertTrue(luaParser.isStackEmpty())
         );    }
 }
