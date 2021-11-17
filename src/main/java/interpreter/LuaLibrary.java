@@ -1,5 +1,6 @@
 package interpreter;
 
+import com.sun.jna.Function;
 import com.sun.jna.Library;
 import com.sun.jna.Pointer;
 
@@ -24,5 +25,5 @@ public interface LuaLibrary extends Library {
 
     void lua_setglobal(Pointer l, String print);
 
-    void lua_pushcclosure(Pointer l, Pointer CFunction, int n);
+    void lua_pushcclosure(Pointer l, Function CFunction, int n);
 }
