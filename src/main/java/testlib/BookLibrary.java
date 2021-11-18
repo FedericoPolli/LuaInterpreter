@@ -8,9 +8,7 @@ public interface BookLibrary extends Library {
     @Structure.FieldOrder({"title", "author", "series", "book_len"})
     class Book extends Structure {
         public static class ByReference extends Book implements Structure.ByReference {}
-        public byte[] title = new byte[20];
-        public byte[] author = new byte[20];
-        public byte[] series = new byte[20];
+        public byte[] title, author, series;
         public int book_len;
     }
 
