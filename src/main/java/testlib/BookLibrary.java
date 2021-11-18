@@ -6,14 +6,16 @@ import com.sun.jna.Structure;
 public interface BookLibrary extends Library {
 
     @Structure.FieldOrder({"title", "author", "series", "book_len"})
-    public static class Books extends Structure{
-        public static class ByReference extends Books implements Structure.ByReference {}
-        public String title, author, series;
+    class Book extends Structure {
+        public static class ByReference extends Book implements Structure.ByReference {}
+        public byte[] title = new byte[20];
+        public byte[] author = new byte[20];
+        public byte[] series = new byte[20];
         public int book_len;
     }
 
-    void printBook(Books.ByReference book);
-    void printBooks(Books.ByReference[] books);
-    double averageBookLen(Books.ByReference[] books);
-    int totalBooksLen(Books.ByReference[] books);
+    void printBook(Book.ByReference book);
+    void printBooks(Book.ByReference[] books, int numOfBooks);
+    double averageBookLen(Book.ByReference[] books, int numOfBooks);
+    int totalBooksLen(Book.ByReference[] books, int numOfBooks);
 }
