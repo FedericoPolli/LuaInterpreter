@@ -16,7 +16,7 @@ public interface BookLibrary extends Library {
         public Pointer words_per_page; // int
     }
 
-    void printBookFromThread(Book book);
+    void printBooksFromThread(Book[] books, int size);
 
     void printBook(Book book);
     void printBooks(Book[] books, int numOfBooks);

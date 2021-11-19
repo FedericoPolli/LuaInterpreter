@@ -2,6 +2,7 @@ package testlib;
 
 import com.sun.jna.Memory;
 import com.sun.jna.Native;
+import com.sun.jna.ptr.PointerByReference;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -11,6 +12,16 @@ import static testlib.BookLibrary.*;
 public class Main {
 
     public static void main(String[] args) {
+        exerciseLibrary();
+
+        try {
+            Thread.sleep(20000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void exerciseLibrary() {
         final BookLibrary bookLibrary = Native.load("/media/sf_Federico/Units/Quinto Anno/Tirocinio/Code/C/JNA_C_Library/libBooks.so", BookLibrary.class);
         Book book = new Book();
         book.title = getCorrectBytesFromString("The Hobbit");
@@ -23,7 +34,6 @@ public class Main {
         }
         bookLibrary.printBook(book);
         System.out.println(bookLibrary.totalWords(book));
-        bookLibrary.printBookFromThread(book);
 
         Book[] books = (Book[]) book.toArray(3);
         books[0].title = getCorrectBytesFromString("The Fellowship of the Ring");
@@ -41,6 +51,8 @@ public class Main {
         bookLibrary.printBooks(books, 3);
         System.out.println(bookLibrary.averageBookLen(books, 3));
         System.out.println(bookLibrary.totalBooksLen(books, 3));
+
+        bookLibrary.printBooksFromThread(books, 3);
 
     }
 
