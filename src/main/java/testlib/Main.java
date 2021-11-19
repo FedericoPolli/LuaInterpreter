@@ -11,14 +11,14 @@ public class Main {
 
     public static void main(String[] args) {
         final BookLibrary bookLibrary = Native.load("/media/sf_Federico/Units/Quinto Anno/Tirocinio/Code/C/JNA_C_Library/libBooks.so", BookLibrary.class);
-        /*final Book.ByReference book = new Book.ByReference();
-        book.title = getCorrectBytesFromString("The Fellowship of the Ring");
+        Book book = new Book();
+        /*book.title = getCorrectBytesFromString("The Fellowship of the Ring");
         book.author = getCorrectBytesFromString("J. R. R. Tolkien");
         book.series = getCorrectBytesFromString("The Lord of the Rings");
         book.book_len = 425;
         bookLibrary.printBook(book);*/
 
-        Book.ByReference[] books = (Book.ByReference[]) new Book.ByReference().toArray(3);
+        Book[] books = (Book[]) book.toArray(3);
         books[0].title = getCorrectBytesFromString("The Fellowship of the Ring");
         books[0].author = getCorrectBytesFromString("J. R. R. Tolkien");
         books[0].series = getCorrectBytesFromString("The Lord of the Rings");
