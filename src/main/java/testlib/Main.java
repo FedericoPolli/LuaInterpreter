@@ -32,6 +32,9 @@ public class Main {
         books[2].series = getCorrectBytesFromString("The Lord of the Rings");
         books[2].book_len = 471;
         bookLibrary.printBooks(books, 3);
+        System.out.flush();
+        System.out.println(bookLibrary.averageBookLen(books, 3));
+        System.out.println(bookLibrary.totalBooksLen(books, 3));
     }
 
     private static byte[] getCorrectBytesFromString(String s) {

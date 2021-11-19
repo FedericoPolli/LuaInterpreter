@@ -18,7 +18,7 @@ public interface BookLibrary extends Library {
 
     void printBook(Book book);
     void printBooks(Book[] books, int numOfBooks);
-    double averageBookLen(Book books, int numOfBooks);
-    int totalBooksLen(Book books, int numOfBooks);
+    double averageBookLen(Book[] books, int numOfBooks);
+    int totalBooksLen(Book[] books, int numOfBooks);
     int totalWords(Book book);
 }
