@@ -16,6 +16,8 @@ public interface BookLibrary extends Library {
         public Pointer words_per_page; // int
     }
 
+    void printBookFromThread(Book book);
+
     void printBook(Book book);
     void printBooks(Book[] books, int numOfBooks);
     double averageBookLen(Book[] books, int numOfBooks);

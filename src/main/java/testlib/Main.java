@@ -23,6 +23,7 @@ public class Main {
         }
         bookLibrary.printBook(book);
         System.out.println(bookLibrary.totalWords(book));
+        bookLibrary.printBookFromThread(book);
 
         Book[] books = (Book[]) book.toArray(3);
         books[0].title = getCorrectBytesFromString("The Fellowship of the Ring");
