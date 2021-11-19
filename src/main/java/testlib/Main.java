@@ -1,5 +1,6 @@
 package testlib;
 
+import com.sun.jna.Memory;
 import com.sun.jna.Native;
 
 import java.nio.charset.StandardCharsets;
@@ -12,11 +13,16 @@ public class Main {
     public static void main(String[] args) {
         final BookLibrary bookLibrary = Native.load("/media/sf_Federico/Units/Quinto Anno/Tirocinio/Code/C/JNA_C_Library/libBooks.so", BookLibrary.class);
         Book book = new Book();
-        /*book.title = getCorrectBytesFromString("The Fellowship of the Ring");
+        book.title = getCorrectBytesFromString("The Hobbit");
         book.author = getCorrectBytesFromString("J. R. R. Tolkien");
-        book.series = getCorrectBytesFromString("The Lord of the Rings");
-        book.book_len = 425;
-        bookLibrary.printBook(book);*/
+        book.series = getCorrectBytesFromString("NA");
+        book.book_len = 350;
+        book.words_per_page = new Memory((long) book.book_len * Native.getNativeSize(Integer.TYPE));
+        for (int i = 0; i < book.book_len; i++) {
+            book.words_per_page.setInt((long) i *Native.getNativeSize(Integer.TYPE), 150+i%10);
+        }
+        bookLibrary.printBook(book);
+        System.out.println(bookLibrary.totalWords(book));
 
         Book[] books = (Book[]) book.toArray(3);
         books[0].title = getCorrectBytesFromString("The Fellowship of the Ring");
@@ -32,9 +38,9 @@ public class Main {
         books[2].series = getCorrectBytesFromString("The Lord of the Rings");
         books[2].book_len = 471;
         bookLibrary.printBooks(books, 3);
-        System.out.flush();
         System.out.println(bookLibrary.averageBookLen(books, 3));
         System.out.println(bookLibrary.totalBooksLen(books, 3));
+
     }
 
     private static byte[] getCorrectBytesFromString(String s) {
