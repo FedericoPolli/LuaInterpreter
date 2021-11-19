@@ -1,21 +1,15 @@
 package testlib;
 
-import com.sun.jna.Memory;
 import com.sun.jna.Native;
-import com.sun.jna.ptr.PointerByReference;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-
-import static testlib.BookLibrary.*;
+import static testlib.BookLibrary.Book;
 
 public class Main {
 
     public static void main(String[] args) {
         exerciseLibrary();
-
         try {
-            Thread.sleep(20000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -24,7 +18,7 @@ public class Main {
     private static void exerciseLibrary() {
         final BookLibrary bookLibrary = Native.load("/media/sf_Federico/Units/Quinto Anno/Tirocinio/Code/C/JNA_C_Library/libBooks.so", BookLibrary.class);
         Book book = new Book();
-        book.title = getCorrectBytesFromString("The Hobbit");
+        /*book.title = getCorrectBytesFromString("The Hobbit");
         book.author = getCorrectBytesFromString("J. R. R. Tolkien");
         book.series = getCorrectBytesFromString("NA");
         book.book_len = 350;
@@ -33,7 +27,7 @@ public class Main {
             book.words_per_page.setInt((long) i *Native.getNativeSize(Integer.TYPE), 150+i%10);
         }
         bookLibrary.printBook(book);
-        System.out.println(bookLibrary.totalWords(book));
+        System.out.println(bookLibrary.totalWords(book));*/
 
         Book[] books = (Book[]) book.toArray(3);
         books[0].title = getCorrectBytesFromString("The Fellowship of the Ring");
@@ -48,12 +42,13 @@ public class Main {
         books[2].author = getCorrectBytesFromString("J. R. R. Tolkien");
         books[2].series = getCorrectBytesFromString("The Lord of the Rings");
         books[2].book_len = 471;
-        bookLibrary.printBooks(books, 3);
-        System.out.println(bookLibrary.averageBookLen(books, 3));
-        System.out.println(bookLibrary.totalBooksLen(books, 3));
+        //bookLibrary.printBooks(books, 3);
+        //System.out.println(bookLibrary.averageBookLen(books, 3));
+        //System.out.println(bookLibrary.totalBooksLen(books, 3));
 
         bookLibrary.printBooksFromThread(books, 3);
-
+        books[0].title = getCorrectBytesFromString("ND");
+        //bookLibrary.printBooksFromThread(books, 3);
     }
 
     private static byte[] getCorrectBytesFromString(String s) {
@@ -61,18 +56,5 @@ public class Main {
         byte[] content = Native.toByteArray(s);
         System.arraycopy(content, 0, wholeSpace, 0, content.length);
         return wholeSpace;
-    }
-
-    private static void printBookJava(Book.ByReference book) {
-        System.out.println("Book title : " + Native.toString(book.title));
-        System.out.println( "Book author : " + Native.toString(book.author));
-        System.out.println( "Book series : " + Native.toString(book.series));
-        System.out.println( "Book book_len : " + book.book_len);
-    }
-
-    private static void printBooksJava(Book.ByReference[] books){
-        for (Book.ByReference book : books) {
-            printBookJava(book);
-        }
     }
 }
