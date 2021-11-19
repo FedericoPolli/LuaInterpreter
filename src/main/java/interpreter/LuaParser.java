@@ -18,7 +18,7 @@ public class LuaParser {
 
     public LuaParser() {
         luaLibrary.luaL_openlibs(L);
-        redefinePrint();
+        //redefinePrint();
     }
 
     private void redefinePrint() {
@@ -43,12 +43,16 @@ public class LuaParser {
     }
 
     public String parseAndRunCommands(String input) {
-        return input.lines().map(this::parseAndRunCommand).collect(Collectors.joining());
+        if (luaLibrary.luaL_loadbufferx(L, input, input.length(), "all", null) !=0 ||
+                runLoadedChunk() !=0) {
+            getAndPopLuaError();
+            return input.lines().map(this::addReturn).map(this::parseAndRunCommand).collect(Collectors.joining());
+        }
+        return getResults();
     }
 
     private String parseAndRunCommand(String line){
-        String retLine = addReturn(line);
-        if (luaLibrary.luaL_loadbufferx(L, retLine, retLine.length(), "line", null) !=0 ||
+        if (luaLibrary.luaL_loadbufferx(L, line, line.length(), "line", null) !=0 ||
                 runLoadedChunk() !=0) {
             return getAndPopLuaError();
         }
@@ -61,7 +65,7 @@ public class LuaParser {
         for (int i = 1; i <= stackSize; i++)
             results.add(luaLibrary.lua_tolstring(L, -stackSize+i-1, null));
         luaLibrary.lua_settop(L, 0);
-        if (results.size() ==0)
+        if (results.size() == 0)
             return "";
         else{
             String formattedResults = results.stream().map(result -> result + ", ").collect(Collectors.joining());
