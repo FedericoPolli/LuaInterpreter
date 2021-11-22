@@ -5,7 +5,9 @@ import interpreter.LuaParser;
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.PrintStream;
 
 import static java.lang.System.*;
 
@@ -18,16 +20,22 @@ public class LuaPanel {
     private JLabel inputsLabel;
     private JLabel outputsLabel;
     private JButton fileButton;
+    private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     private final LuaParser luaParser = new LuaParser();
 
     public LuaPanel() {
+        System.setOut(new PrintStream(outputStream));
         getResultsButton.addActionListener(e -> {
             String input = luaInputs.getText();
             luaInputs.setText("");
             String output = luaParser.parseAndRunCommands(input);
             printResults.append("> "+input + lineSeparator());
+            String print = outputStream.toString();
             if (!output.equals(""))
                 printResults.append(output+ lineSeparator());
+            else if (!print.equals(""))
+                printResults.append(print);
+            outputStream.reset();
         });
 
         fileButton.addActionListener(e -> {

@@ -3,8 +3,6 @@ package interpreter;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,7 +24,6 @@ public class LuaParser {
 
     private int myPrint(Pointer L) {
         int numberOfArgs = luaLibrary.lua_gettop(L);
-        System.out.println("In my print:");
         for (int i = 1; i <= numberOfArgs ; i++) {
             System.out.print(luaLibrary.lua_tolstring(L, i, null) + " ");
         }
