@@ -17,11 +17,16 @@ public class LuaParser {
 
     public LuaParser() {
         luaLibrary.luaL_openlibs(L);
-        redefinePrint();
+        redefinePrintFromC();
+        redefinePrintFromJava();
     }
 
-    private void redefinePrint() {
-        String libPath = "/media/sf_Federico/Units/Quinto Anno/Tirocinio/Code/Java/LuaInterpreter/src/test/resources/Lua_C_library/mylib.so";
+    private void redefinePrintFromJava() {
+
+    }
+
+    private void redefinePrintFromC() {
+        String libPath = "/media/sf_Federico/Units/Quinto Anno/Tirocinio/Code/Java/LuaInterpreter/src/test/resources/Lua_C_library/libPrint.so";
         CLibrary cLibrary = Native.load(libPath, CLibrary.class);
         cLibrary.luaopen_mylib(L);
     }

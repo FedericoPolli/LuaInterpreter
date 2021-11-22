@@ -1,8 +1,8 @@
 package interpreter;
 
-import com.sun.jna.Function;
-import com.sun.jna.Library;
-import com.sun.jna.Pointer;
+import com.sun.jna.*;
+
+import java.util.concurrent.Callable;
 
 public interface LuaLibrary extends Library {
 
@@ -24,6 +24,18 @@ public interface LuaLibrary extends Library {
     boolean lua_isnumber(Pointer l, int i);
 
     void lua_setglobal(Pointer l, String print);
-
     void lua_pushcclosure(Pointer l, Function CFunction, int n);
+
+    void luaL_setfuncs(Pointer L, luaL_Reg lib, int nup);
+
+    @Structure.FieldOrder({"name, func"})
+    class luaL_Reg extends Structure {
+        String name;
+        lua_CFunctionInterface func;
+    }
+
+    interface lua_CFunctionInterface extends Callback {
+        int invoke(Pointer L);
+    }
+
 }
