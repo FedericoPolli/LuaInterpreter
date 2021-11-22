@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 //try to run on windows
 //redirect output
-//minor: allow more lines to be run
 //test end to end
 
 public class LuaParser {
@@ -18,12 +17,13 @@ public class LuaParser {
 
     public LuaParser() {
         luaLibrary.luaL_openlibs(L);
-        //redefinePrint();
+        redefinePrint();
     }
 
     private void redefinePrint() {
-        luaLibrary.lua_pushcclosure(L, null, 0);
-        luaLibrary.lua_setglobal(L, "print");
+        String libPath = "/media/sf_Federico/Units/Quinto Anno/Tirocinio/Code/Java/LuaInterpreter/src/test/resources/Lua_C_library/mylib.so";
+        CLibrary cLibrary = Native.load(libPath, CLibrary.class);
+        cLibrary.luaopen_mylib(L);
     }
 
 
