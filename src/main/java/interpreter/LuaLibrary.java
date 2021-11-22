@@ -2,8 +2,6 @@ package interpreter;
 
 import com.sun.jna.*;
 
-import java.util.concurrent.Callable;
-
 public interface LuaLibrary extends Library {
 
     Pointer luaL_newstate();
