@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 public class LuaParser {
     private final LuaLibrary luaLibrary = Native.load("/usr/local/lib/liblua.so", LuaLibrary.class);
     private final Pointer L = luaLibrary.luaL_newstate();
+    private final LuaLibrary.luaL_Reg luaReg= new LuaLibrary.luaL_Reg();
 
     public LuaParser() {
         luaLibrary.luaL_openlibs(L);
@@ -21,8 +22,25 @@ public class LuaParser {
         redefinePrintFromJava();
     }
 
-    private void redefinePrintFromJava() {
+    private int myPrint(Pointer L) {
+        int numberOfArgs = luaLibrary.lua_gettop(L);
+        System.out.println("In my print:");
+        for (int i = 1; i <= numberOfArgs ; i++) {
+            System.out.print(luaLibrary.lua_tolstring(L, i, null) + " ");
+        }
+        System.out.println();
+        return 0;
+    }
 
+    private void redefinePrintFromJava() {
+        LuaLibrary.luaL_Reg[] myLib = (LuaLibrary.luaL_Reg[]) luaReg.toArray(2);
+        myLib[0].name = "print";
+        myLib[0].func = this::myPrint;
+        myLib[1].name = null;
+        myLib[1].func = null;
+        luaLibrary.lua_getglobal(L, "_G");
+        luaLibrary.luaL_setfuncs(L, myLib, 0);
+        luaLibrary.lua_settop(L, -2);
     }
 
     private void redefinePrintFromC() {

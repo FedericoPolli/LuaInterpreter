@@ -20,7 +20,7 @@ static int l_my_print(lua_State* L) {
 
 //library to be registered
 static const struct luaL_Reg mylib [] = {
-      {"print", l_my_print},
+      {"l_print", l_my_print},
       {NULL, NULL}  /* sentinel */
     };
 

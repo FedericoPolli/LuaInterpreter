@@ -98,4 +98,12 @@ class LuaParserTest {
                 () -> assertEquals(output, luaParser.parseAndRunCommands(command)),
                 () -> assertTrue(luaParser.isStackEmpty())
         );    }
+
+    @Test
+    void checkPrintIsRedefined() {
+        ApplicationRunner application = new ApplicationRunner();
+        String command = "print(2)";
+        String expected = "In my print:"+System.lineSeparator()+"2"+System.lineSeparator();
+        application.testCommand(command, expected);
+    }
 }

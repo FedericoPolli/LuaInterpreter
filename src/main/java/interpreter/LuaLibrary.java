@@ -26,12 +26,12 @@ public interface LuaLibrary extends Library {
     void lua_setglobal(Pointer l, String print);
     void lua_pushcclosure(Pointer l, Function CFunction, int n);
 
-    void luaL_setfuncs(Pointer L, luaL_Reg lib, int nup);
+    void luaL_setfuncs(Pointer L, luaL_Reg[] lib, int nup);
 
-    @Structure.FieldOrder({"name, func"})
+    @Structure.FieldOrder({"name", "func"})
     class luaL_Reg extends Structure {
-        String name;
-        lua_CFunctionInterface func;
+        public String name;
+        public lua_CFunctionInterface func;
     }
 
     interface lua_CFunctionInterface extends Callback {
