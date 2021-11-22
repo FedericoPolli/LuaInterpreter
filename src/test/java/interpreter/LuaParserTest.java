@@ -100,7 +100,8 @@ class LuaParserTest {
         assertAll(
                 () -> assertEquals(output, luaParser.parseAndRunCommands(command)),
                 () -> assertTrue(luaParser.isStackEmpty())
-        );    }
+        );
+    }
 
     @Test
     void checkPrintIsRedefined() {
@@ -110,6 +111,23 @@ class LuaParserTest {
         String command = "print(2)";
         luaParser.parseAndRunCommands(command);
         String expected = "In my print:"+System.lineSeparator()+"2 "+System.lineSeparator();
-        assertEquals(expected, outputStream.toString());
+        assertAll(
+                () -> assertEquals(expected, outputStream.toString()),
+                () -> assertTrue(luaParser.isStackEmpty())
+        );
+    }
+
+    @Test
+    void checkCorrectOutputFromPrint() {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outputStream));
+        LuaParser luaParser = new LuaParser();
+        String command = "print(2,3,4,5,6)";
+        luaParser.parseAndRunCommands(command);
+        String expected = "In my print:"+System.lineSeparator()+"2 3 4 5 6 "+System.lineSeparator();
+        assertAll(
+                () -> assertEquals(expected, outputStream.toString()),
+                () -> assertTrue(luaParser.isStackEmpty())
+        );
     }
 }

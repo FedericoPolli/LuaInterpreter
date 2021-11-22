@@ -3,6 +3,8 @@ package interpreter;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,7 +20,7 @@ public class LuaParser {
 
     public LuaParser() {
         luaLibrary.luaL_openlibs(L);
-        redefinePrintFromC();
+        //redefinePrintFromC();
         redefinePrintFromJava();
     }
 
