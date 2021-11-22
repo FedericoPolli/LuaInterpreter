@@ -110,7 +110,7 @@ class LuaParserTest {
         LuaParser luaParser = new LuaParser();
         String command = "print(2)";
         luaParser.parseAndRunCommands(command);
-        String expected = "In my print:"+System.lineSeparator()+"2 "+System.lineSeparator();
+        String expected = "2 "+System.lineSeparator();
         assertAll(
                 () -> assertEquals(expected, outputStream.toString()),
                 () -> assertTrue(luaParser.isStackEmpty())
@@ -124,7 +124,7 @@ class LuaParserTest {
         LuaParser luaParser = new LuaParser();
         String command = "print(2,3,4,5,6)";
         luaParser.parseAndRunCommands(command);
-        String expected = "In my print:"+System.lineSeparator()+"2 3 4 5 6 "+System.lineSeparator();
+        String expected = "2 3 4 5 6 "+System.lineSeparator();
         assertAll(
                 () -> assertEquals(expected, outputStream.toString()),
                 () -> assertTrue(luaParser.isStackEmpty())
