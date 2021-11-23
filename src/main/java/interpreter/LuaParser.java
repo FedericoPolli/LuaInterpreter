@@ -17,7 +17,6 @@ public class LuaParser {
 
     public LuaParser() {
         luaLibrary.luaL_openlibs(L);
-        //redefinePrintFromC();
         redefinePrintFromJava();
     }
 
@@ -40,13 +39,6 @@ public class LuaParser {
         luaLibrary.luaL_setfuncs(L, myLib, 0);
         luaLibrary.lua_settop(L, -2);
     }
-
-    private void redefinePrintFromC() {
-        String libPath = "/media/sf_Federico/Units/Quinto Anno/Tirocinio/Code/Java/LuaInterpreter/src/test/resources/Lua_C_library/libPrint.so";
-        CLibrary cLibrary = Native.load(libPath, CLibrary.class);
-        cLibrary.luaopen_mylib(L);
-    }
-
 
     public void closeLua() {
         luaLibrary.lua_close(L);

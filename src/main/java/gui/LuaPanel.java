@@ -24,6 +24,11 @@ public class LuaPanel {
     private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     private final LuaParser luaParser = new LuaParser();
 
+
+    //1)rendere disponibili socket di java in lua, fare funzione che permette di fare richiesta http da lua
+    //2)abilitare thread java in lua, passare codice a interprete lua in un altro thread
+    //  2b) ecosistema di interpreti lua che parlano tra loro
+    //3)implementa in lua modulo con funzioni per creare gui in lua
     public LuaPanel() {
         System.setOut(new PrintStream(outputStream));
         getResultsButton.addActionListener(e -> {
