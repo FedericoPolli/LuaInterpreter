@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 //test end to end
 
 public class LuaParser {
-    private final LuaLibrary luaLibrary = Native.load("/usr/local/lib/liblua.so", LuaLibrary.class);
+    private final LuaLibrary luaLibrary = Native.load("liblua.so", LuaLibrary.class);
     private final Pointer L = luaLibrary.luaL_newstate();
     private final LuaLibrary.luaL_Reg luaReg= new LuaLibrary.luaL_Reg();
 
