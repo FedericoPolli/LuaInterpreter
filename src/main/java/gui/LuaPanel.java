@@ -8,6 +8,7 @@ import java.awt.event.WindowEvent;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
+import java.util.stream.Collectors;
 
 import static java.lang.System.lineSeparator;
 
@@ -35,6 +36,7 @@ public class LuaPanel {
             luaInputs.setText("");
             String output = luaParser.parseAndRunCommands(input);
             String print = outputStream.toString();
+            printResults.append(input.lines().map(line -> "> "+line+lineSeparator()).collect(Collectors.joining()));
             if (!output.equals(""))
                 printResults.append(output+ lineSeparator());
             else if (!print.equals(""))

@@ -56,6 +56,9 @@ public class LuaParser {
     }
 
     public String parseAndRunCommands(String input) {
+        if (input.lines().count() == 1) {
+            return parseAndRunCommand(addReturn(input));
+        }
         if (luaLibrary.luaL_loadbufferx(L, input, input.length(), "all", null) !=0 ||
                 runLoadedChunk() !=0) {
             getAndPopLuaError();
