@@ -2,6 +2,9 @@ package interpreter;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class LuaParserTest {
@@ -97,5 +100,34 @@ class LuaParserTest {
         assertAll(
                 () -> assertEquals(output, luaParser.parseAndRunCommands(command)),
                 () -> assertTrue(luaParser.isStackEmpty())
-        );    }
+        );
+    }
+
+    @Test
+    void checkPrintIsRedefined() {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outputStream));
+        LuaParser luaParser = new LuaParser();
+        String command = "print(2)";
+        luaParser.parseAndRunCommands(command);
+        String expected = "2 "+System.lineSeparator();
+        assertAll(
+                () -> assertEquals(expected, outputStream.toString()),
+                () -> assertTrue(luaParser.isStackEmpty())
+        );
+    }
+
+    @Test
+    void checkCorrectOutputFromPrint() {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outputStream));
+        LuaParser luaParser = new LuaParser();
+        String command = "print(2,3,4,5,6)";
+        luaParser.parseAndRunCommands(command);
+        String expected = "2 3 4 5 6 "+System.lineSeparator();
+        assertAll(
+                () -> assertEquals(expected, outputStream.toString()),
+                () -> assertTrue(luaParser.isStackEmpty())
+        );
+    }
 }

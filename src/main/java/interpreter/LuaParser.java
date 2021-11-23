@@ -8,24 +8,37 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 //try to run on windows
-//redirect output
-//minor: allow more lines to be run
 //test end to end
 
 public class LuaParser {
-    private final LuaLibrary luaLibrary = Native.load("/usr/local/lib/liblua.so", LuaLibrary.class);
+    private final LuaLibrary luaLibrary = Native.load("liblua.so", LuaLibrary.class);
     private final Pointer L = luaLibrary.luaL_newstate();
+    private final LuaLibrary.luaL_Reg luaReg= new LuaLibrary.luaL_Reg();
 
     public LuaParser() {
         luaLibrary.luaL_openlibs(L);
-        redefinePrint();
+        redefinePrintFromJava();
     }
 
-    private void redefinePrint() {
-        luaLibrary.lua_pushcclosure(L, null, 0);
-        luaLibrary.lua_setglobal(L, "print");
+    private int myPrint(Pointer L) {
+        int numberOfArgs = luaLibrary.lua_gettop(L);
+        for (int i = 1; i <= numberOfArgs ; i++) {
+            System.out.print(luaLibrary.lua_tolstring(L, i, null) + " ");
+        }
+        System.out.println();
+        return 0;
     }
 
+    private void redefinePrintFromJava() {
+        LuaLibrary.luaL_Reg[] myLib = (LuaLibrary.luaL_Reg[]) luaReg.toArray(2);
+        myLib[0].name = "print";
+        myLib[0].func = this::myPrint;
+        myLib[1].name = null;
+        myLib[1].func = null;
+        luaLibrary.lua_getglobal(L, "_G");
+        luaLibrary.luaL_setfuncs(L, myLib, 0);
+        luaLibrary.lua_settop(L, -2);
+    }
 
     public void closeLua() {
         luaLibrary.lua_close(L);
@@ -43,12 +56,19 @@ public class LuaParser {
     }
 
     public String parseAndRunCommands(String input) {
-        return input.lines().map(this::parseAndRunCommand).collect(Collectors.joining());
+        if (input.lines().count() == 1) {
+            return parseAndRunCommand(addReturn(input));
+        }
+        if (luaLibrary.luaL_loadbufferx(L, input, input.length(), "all", null) !=0 ||
+                runLoadedChunk() !=0) {
+            getAndPopLuaError();
+            return input.lines().map(this::addReturn).map(this::parseAndRunCommand).collect(Collectors.joining());
+        }
+        return getResults();
     }
 
     private String parseAndRunCommand(String line){
-        String retLine = addReturn(line);
-        if (luaLibrary.luaL_loadbufferx(L, retLine, retLine.length(), "line", null) !=0 ||
+        if (luaLibrary.luaL_loadbufferx(L, line, line.length(), "line", null) !=0 ||
                 runLoadedChunk() !=0) {
             return getAndPopLuaError();
         }
@@ -61,7 +81,7 @@ public class LuaParser {
         for (int i = 1; i <= stackSize; i++)
             results.add(luaLibrary.lua_tolstring(L, -stackSize+i-1, null));
         luaLibrary.lua_settop(L, 0);
-        if (results.size() ==0)
+        if (results.size() == 0)
             return "";
         else{
             String formattedResults = results.stream().map(result -> result + ", ").collect(Collectors.joining());
