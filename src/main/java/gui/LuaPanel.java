@@ -1,14 +1,16 @@
 package gui;
 
+import com.intellij.uiDesigner.core.GridConstraints;
+import com.intellij.uiDesigner.core.GridLayoutManager;
 import interpreter.LuaParser;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.stream.Collectors;
 
 import static java.lang.System.lineSeparator;
@@ -18,10 +20,11 @@ public class LuaPanel {
     private JButton getResultsButton;
     private JTextArea luaInputs;
     private JTextArea printResults;
-    private JScrollPane scrollPane;
+    private JScrollPane scrollOutputs;
     private JLabel inputsLabel;
     private JLabel outputsLabel;
     private JButton fileButton;
+    private JScrollPane scrollInputs;
     private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     private final LuaParser luaParser = new LuaParser();
 
@@ -31,7 +34,9 @@ public class LuaPanel {
     //  2b) ecosistema di interpreti lua che parlano tra loro
     //3)implementa in lua modulo con funzioni per creare gui in lua
     public LuaPanel() {
-        System.setOut(new PrintStream(outputStream));
+        PrintStream printStream = new PrintStream(outputStream);
+        System.setOut(printStream);
+
         getResultsButton.addActionListener(e -> {
             String input = luaInputs.getText();
             luaInputs.setText("");
@@ -59,6 +64,18 @@ public class LuaPanel {
                     printResults.append(print);
                 outputStream.reset();
             }
+        });
+
+        luaInputs.addKeyListener(new KeyAdapter() {
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (e.isShiftDown() && e.getKeyCode() == KeyEvent.VK_ENTER)
+                    luaInputs.append(System.lineSeparator());
+                else if (e.getKeyCode() == KeyEvent.VK_ENTER)
+                    getResultsButton.doClick();
+            }
+
         });
     }
 
@@ -93,28 +110,30 @@ public class LuaPanel {
      */
     private void $$$setupUI$$$() {
         rootPanel = new JPanel();
-        rootPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(5, 2, new Insets(0, 0, 0, 0), -1, -1));
+        rootPanel.setLayout(new GridLayoutManager(5, 2, new Insets(0, 0, 0, 0), -1, -1));
         getResultsButton = new JButton();
         getResultsButton.setText("Get Results");
-        rootPanel.add(getResultsButton, new com.intellij.uiDesigner.core.GridConstraints(4, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, new Dimension(-1, 50), null, null, 0, false));
+        rootPanel.add(getResultsButton, new GridConstraints(4, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(-1, 50), null, null, 0, false));
         outputsLabel = new JLabel();
         outputsLabel.setText("Here are Lua's outputs");
-        rootPanel.add(outputsLabel, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 2, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        luaInputs = new JTextArea();
-        luaInputs.setText("");
-        rootPanel.add(luaInputs, new com.intellij.uiDesigner.core.GridConstraints(4, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, new Dimension(-1, 120), new Dimension(342, 120), new Dimension(-1, 120), 0, false));
+        rootPanel.add(outputsLabel, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         inputsLabel = new JLabel();
         inputsLabel.setText("Enter your inputs here:");
-        rootPanel.add(inputsLabel, new com.intellij.uiDesigner.core.GridConstraints(3, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(342, 40), new Dimension(-1, 40), 0, false));
+        rootPanel.add(inputsLabel, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(342, 40), new Dimension(-1, 40), 0, false));
         fileButton = new JButton();
         fileButton.setText("Select from files");
-        rootPanel.add(fileButton, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(-1, 30), null, 0, false));
-        scrollPane = new JScrollPane();
-        scrollPane.setVerticalScrollBarPolicy(22);
-        rootPanel.add(scrollPane, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 2, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, new Dimension(-1, 200), null, null, 0, false));
+        rootPanel.add(fileButton, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(-1, 30), null, 0, false));
+        scrollOutputs = new JScrollPane();
+        scrollOutputs.setVerticalScrollBarPolicy(22);
+        rootPanel.add(scrollOutputs, new GridConstraints(2, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, new Dimension(-1, 200), null, null, 0, false));
         printResults = new JTextArea();
         printResults.setEditable(false);
-        scrollPane.setViewportView(printResults);
+        scrollOutputs.setViewportView(printResults);
+        scrollInputs = new JScrollPane();
+        rootPanel.add(scrollInputs, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, new Dimension(-1, 150), null, null, 0, false));
+        luaInputs = new JTextArea();
+        luaInputs.setText("");
+        scrollInputs.setViewportView(luaInputs);
     }
 
     /**
@@ -123,4 +142,5 @@ public class LuaPanel {
     public JComponent $$$getRootComponent$$$() {
         return rootPanel;
     }
+
 }
