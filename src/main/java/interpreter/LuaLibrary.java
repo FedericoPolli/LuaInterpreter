@@ -26,6 +26,8 @@ public interface LuaLibrary extends Library {
 
     void luaL_setfuncs(Pointer L, luaL_Reg[] lib, int nup);
 
+    void lua_error(Pointer l);
+
     @Structure.FieldOrder({"name", "func"})
     class luaL_Reg extends Structure {
         public String name;

@@ -110,4 +110,8 @@ public class LuaParser {
     private int runLoadedChunk(){
         return luaLibrary.lua_pcallk(L, 0, -1, 0, 0, null);
     }
+
+    public void raiseError() {
+        luaLibrary.lua_error(L);
+    }
 }
