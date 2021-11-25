@@ -66,19 +66,18 @@ public class LuaGui {
         JLabel inputsLabel = new JLabel("Enter your inputs here:", SwingConstants.CENTER);
         GridBagConstraints inputsLabelConstraints = new GridBagConstraints();
         inputsLabelConstraints.fill=GridBagConstraints.BOTH;
-        inputsLabelConstraints.weighty = 0.5;
+        inputsLabelConstraints.weighty = 0.2;
         inputsLabelConstraints.weightx = 0.5;
-        inputsLabelConstraints.gridwidth = 3;
-        inputsLabelConstraints.gridx = 0;
+        inputsLabelConstraints.gridx = 1;
         inputsLabelConstraints.gridy = 2;
         rootPanel.add(inputsLabel, inputsLabelConstraints);
 
         JLabel outputsLabel = new JLabel("Here are Lua's outputs", SwingConstants.CENTER);
         GridBagConstraints outputsLabelConstraints = new GridBagConstraints();
         outputsLabelConstraints.fill=GridBagConstraints.BOTH;
-        outputsLabelConstraints.weighty = 0.5;
+        outputsLabelConstraints.weighty = 0.2;
         outputsLabelConstraints.weightx = 0.5;
-        outputsLabelConstraints.gridwidth = 3;
+        outputsLabelConstraints.gridwidth = 2;
         outputsLabelConstraints.gridx = 0;
         outputsLabelConstraints.gridy = 0;
         rootPanel.add(outputsLabel, outputsLabelConstraints);
@@ -86,31 +85,31 @@ public class LuaGui {
         JButton getResultsButton = new JButton("Get Results");
         GridBagConstraints getResultsButtonConstraints = new GridBagConstraints();
         getResultsButtonConstraints.fill=GridBagConstraints.BOTH;
-        getResultsButtonConstraints.weightx = 0.2;
+        getResultsButtonConstraints.weightx = 0.1;
         getResultsButtonConstraints.weighty = 0.2;
         getResultsButtonConstraints.gridx = 0;
-        getResultsButtonConstraints.gridy = 4;
-        getResultsButtonConstraints.insets = new Insets(100, 50, 100, 50);
+        getResultsButtonConstraints.gridy = 2;
+        getResultsButtonConstraints.insets = new Insets(10, 50, 10, 50);
         rootPanel.add(getResultsButton, getResultsButtonConstraints);
 
         JButton fileButton = new JButton("Select from files");
         GridBagConstraints fileButtonConstraints = new GridBagConstraints();
         fileButtonConstraints.fill=GridBagConstraints.BOTH;
-        fileButtonConstraints.weighty = 0.2;
+        fileButtonConstraints.weighty = 0.1;
         fileButtonConstraints.weightx = 0.2;
-        fileButtonConstraints.insets = new Insets(100, 50, 100, 50);
-        fileButtonConstraints.gridx = 1;
-        fileButtonConstraints.gridy = 4;
+        fileButtonConstraints.insets = new Insets(10, 50, 10, 50);
+        fileButtonConstraints.gridx = 2;
+        fileButtonConstraints.gridy = 2;
         rootPanel.add(fileButton, fileButtonConstraints);
 
         JButton clearButton = new JButton("Clear Outputs");
         GridBagConstraints clearButtonConstraints = new GridBagConstraints();
         clearButtonConstraints.fill=GridBagConstraints.BOTH;
-        clearButtonConstraints.weighty = 0.2;
+        clearButtonConstraints.weighty = 0.1;
         clearButtonConstraints.weightx = 0.2;
-        clearButtonConstraints.insets = new Insets(100, 50, 100, 50);
+        clearButtonConstraints.insets = new Insets(10, 50, 10, 50);
         clearButtonConstraints.gridx = 2;
-        clearButtonConstraints.gridy = 4;
+        clearButtonConstraints.gridy = 0;
         rootPanel.add(clearButton, clearButtonConstraints);
 
         getResultsButton.addActionListener(e -> {
