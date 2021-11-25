@@ -44,6 +44,7 @@ public class LuaGui {
         printResultsConstraints.fill=GridBagConstraints.BOTH;
         printResultsConstraints.weighty = 0.8;
         printResultsConstraints.weightx = 0.8;
+        printResultsConstraints.gridwidth = 3;
         printResultsConstraints.gridx = 0;
         printResultsConstraints.gridy = 3;
         rootPanel.add(scrollInputs, printResultsConstraints);
@@ -57,7 +58,7 @@ public class LuaGui {
         scrollOutputsConstraints.fill=GridBagConstraints.BOTH;
         scrollOutputsConstraints.weighty = 0.8;
         scrollOutputsConstraints.weightx = 0.8;
-        scrollOutputsConstraints.gridwidth = 2;
+        scrollOutputsConstraints.gridwidth = 3;
         scrollOutputsConstraints.gridx = 0;
         scrollOutputsConstraints.gridy = 1;
         rootPanel.add(scrollOutputs, scrollOutputsConstraints);
@@ -65,8 +66,9 @@ public class LuaGui {
         JLabel inputsLabel = new JLabel("Enter your inputs here:", SwingConstants.CENTER);
         GridBagConstraints inputsLabelConstraints = new GridBagConstraints();
         inputsLabelConstraints.fill=GridBagConstraints.BOTH;
-        inputsLabelConstraints.weighty = 0.2;
-        inputsLabelConstraints.weightx = 0.8;
+        inputsLabelConstraints.weighty = 0.5;
+        inputsLabelConstraints.weightx = 0.5;
+        inputsLabelConstraints.gridwidth = 3;
         inputsLabelConstraints.gridx = 0;
         inputsLabelConstraints.gridy = 2;
         rootPanel.add(inputsLabel, inputsLabelConstraints);
@@ -74,8 +76,9 @@ public class LuaGui {
         JLabel outputsLabel = new JLabel("Here are Lua's outputs", SwingConstants.CENTER);
         GridBagConstraints outputsLabelConstraints = new GridBagConstraints();
         outputsLabelConstraints.fill=GridBagConstraints.BOTH;
-        outputsLabelConstraints.weighty = 0.2;
-        outputsLabelConstraints.weightx = 0.8;
+        outputsLabelConstraints.weighty = 0.5;
+        outputsLabelConstraints.weightx = 0.5;
+        outputsLabelConstraints.gridwidth = 3;
         outputsLabelConstraints.gridx = 0;
         outputsLabelConstraints.gridy = 0;
         rootPanel.add(outputsLabel, outputsLabelConstraints);
@@ -85,8 +88,8 @@ public class LuaGui {
         getResultsButtonConstraints.fill=GridBagConstraints.BOTH;
         getResultsButtonConstraints.weightx = 0.2;
         getResultsButtonConstraints.weighty = 0.2;
-        getResultsButtonConstraints.gridx = 1;
-        getResultsButtonConstraints.gridy = 3;
+        getResultsButtonConstraints.gridx = 0;
+        getResultsButtonConstraints.gridy = 4;
         getResultsButtonConstraints.insets = new Insets(100, 50, 100, 50);
         rootPanel.add(getResultsButton, getResultsButtonConstraints);
 
@@ -95,9 +98,9 @@ public class LuaGui {
         fileButtonConstraints.fill=GridBagConstraints.BOTH;
         fileButtonConstraints.weighty = 0.2;
         fileButtonConstraints.weightx = 0.2;
-        fileButtonConstraints.insets = new Insets(0, 50, 0, 50);
+        fileButtonConstraints.insets = new Insets(100, 50, 100, 50);
         fileButtonConstraints.gridx = 1;
-        fileButtonConstraints.gridy = 0;
+        fileButtonConstraints.gridy = 4;
         rootPanel.add(fileButton, fileButtonConstraints);
 
         JButton clearButton = new JButton("Clear Outputs");
@@ -105,9 +108,9 @@ public class LuaGui {
         clearButtonConstraints.fill=GridBagConstraints.BOTH;
         clearButtonConstraints.weighty = 0.2;
         clearButtonConstraints.weightx = 0.2;
-        clearButtonConstraints.insets = new Insets(0, 50, 0, 50);
-        clearButtonConstraints.gridx = 1;
-        clearButtonConstraints.gridy = 2;
+        clearButtonConstraints.insets = new Insets(100, 50, 100, 50);
+        clearButtonConstraints.gridx = 2;
+        clearButtonConstraints.gridy = 4;
         rootPanel.add(clearButton, clearButtonConstraints);
 
         getResultsButton.addActionListener(e -> {
