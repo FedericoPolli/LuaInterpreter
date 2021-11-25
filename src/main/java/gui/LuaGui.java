@@ -1,4 +1,4 @@
-package new_gui;
+package gui;
 
 import interpreter.LuaParser;
 
