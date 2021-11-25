@@ -7,8 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//try to run on windows
 //test end to end
+//1)rendere disponibili socket di java in lua, fare funzione che permette di fare richiesta http da lua
+//2)abilitare thread java in lua, passare codice a interprete lua in un altro thread
+//  2b) ecosistema di interpreti lua che parlano tra loro
+//3)implementa in lua modulo con funzioni per creare gui in lua
 
 public class LuaParser {
     private final LuaLibrary luaLibrary = Native.load("liblua.so", LuaLibrary.class);
@@ -17,7 +20,7 @@ public class LuaParser {
 
     public LuaParser() {
         luaLibrary.luaL_openlibs(L);
-        redefinePrintFromJava();
+        passFunctionsToLua();
     }
 
     private int myPrint(Pointer L) {
@@ -29,7 +32,7 @@ public class LuaParser {
         return 0;
     }
 
-    private void redefinePrintFromJava() {
+    private void passFunctionsToLua() {
         LuaLibrary.luaL_Reg[] myLib = (LuaLibrary.luaL_Reg[]) luaReg.toArray(2);
         myLib[0].name = "print";
         myLib[0].func = this::myPrint;
