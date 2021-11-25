@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
@@ -25,17 +27,14 @@ public class LuaGui {
         JFrame frame = new JFrame("LuaGui");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 400);
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                luaParser.closeLua();
+            }
+        });
 
         JPanel rootPanel = new JPanel(new GridBagLayout());
-
-        JButton getResultsButton = new JButton("Get Results");
-        GridBagConstraints getResultsButtonConstraints = new GridBagConstraints();
-        getResultsButtonConstraints.fill=GridBagConstraints.BOTH;
-        getResultsButtonConstraints.weightx = 0.3;
-        getResultsButtonConstraints.weighty = 0.3;
-        getResultsButtonConstraints.gridx = 1;
-        getResultsButtonConstraints.gridy = 4;
-        rootPanel.add(getResultsButton, getResultsButtonConstraints);
 
         JTextArea luaInputs = new JTextArea();
         rootPanel.add(luaInputs);
@@ -43,10 +42,10 @@ public class LuaGui {
         JScrollPane scrollInputs = new JScrollPane(luaInputs);
         GridBagConstraints printResultsConstraints = new GridBagConstraints();
         printResultsConstraints.fill=GridBagConstraints.BOTH;
-        printResultsConstraints.weighty = 0.7;
-        printResultsConstraints.weightx = 0.7;
+        printResultsConstraints.weighty = 0.8;
+        printResultsConstraints.weightx = 0.8;
         printResultsConstraints.gridx = 0;
-        printResultsConstraints.gridy = 4;
+        printResultsConstraints.gridy = 3;
         rootPanel.add(scrollInputs, printResultsConstraints);
 
         JTextArea printResults = new JTextArea();
@@ -54,51 +53,61 @@ public class LuaGui {
         rootPanel.add(printResults);
 
         JScrollPane scrollOutputs = new JScrollPane(printResults);
-        scrollOutputs.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         GridBagConstraints scrollOutputsConstraints = new GridBagConstraints();
         scrollOutputsConstraints.fill=GridBagConstraints.BOTH;
-        scrollOutputsConstraints.weighty = 0.7;
-        scrollOutputsConstraints.weightx = 0.7;
+        scrollOutputsConstraints.weighty = 0.8;
+        scrollOutputsConstraints.weightx = 0.8;
         scrollOutputsConstraints.gridwidth = 2;
         scrollOutputsConstraints.gridx = 0;
-        scrollOutputsConstraints.gridy = 2;
+        scrollOutputsConstraints.gridy = 1;
         rootPanel.add(scrollOutputs, scrollOutputsConstraints);
 
-        JLabel inputsLabel = new JLabel("Enter your inputs here:");
+        JLabel inputsLabel = new JLabel("Enter your inputs here:", SwingConstants.CENTER);
         GridBagConstraints inputsLabelConstraints = new GridBagConstraints();
         inputsLabelConstraints.fill=GridBagConstraints.BOTH;
-        inputsLabelConstraints.weighty = 0.3;
-        inputsLabelConstraints.weightx = 0.3;
+        inputsLabelConstraints.weighty = 0.2;
+        inputsLabelConstraints.weightx = 0.8;
         inputsLabelConstraints.gridx = 0;
-        inputsLabelConstraints.gridy = 3;
+        inputsLabelConstraints.gridy = 2;
         rootPanel.add(inputsLabel, inputsLabelConstraints);
 
-        JLabel outputsLabel = new JLabel("Here are Lua's outputs");
+        JLabel outputsLabel = new JLabel("Here are Lua's outputs", SwingConstants.CENTER);
         GridBagConstraints outputsLabelConstraints = new GridBagConstraints();
         outputsLabelConstraints.fill=GridBagConstraints.BOTH;
-        outputsLabelConstraints.weighty = 0.3;
-        outputsLabelConstraints.weightx = 0.7;
-        outputsLabelConstraints.gridwidth = 2;
+        outputsLabelConstraints.weighty = 0.2;
+        outputsLabelConstraints.weightx = 0.8;
         outputsLabelConstraints.gridx = 0;
-        outputsLabelConstraints.gridy = 1;
+        outputsLabelConstraints.gridy = 0;
         rootPanel.add(outputsLabel, outputsLabelConstraints);
+
+        JButton getResultsButton = new JButton("Get Results");
+        GridBagConstraints getResultsButtonConstraints = new GridBagConstraints();
+        getResultsButtonConstraints.fill=GridBagConstraints.BOTH;
+        getResultsButtonConstraints.weightx = 0.2;
+        getResultsButtonConstraints.weighty = 0.2;
+        getResultsButtonConstraints.gridx = 1;
+        getResultsButtonConstraints.gridy = 3;
+        getResultsButtonConstraints.insets = new Insets(100, 50, 100, 50);
+        rootPanel.add(getResultsButton, getResultsButtonConstraints);
 
         JButton fileButton = new JButton("Select from files");
         GridBagConstraints fileButtonConstraints = new GridBagConstraints();
         fileButtonConstraints.fill=GridBagConstraints.BOTH;
-        fileButtonConstraints.weighty = 0.3;
-        fileButtonConstraints.weightx = 0.3;
-        fileButtonConstraints.gridx = 0;
+        fileButtonConstraints.weighty = 0.2;
+        fileButtonConstraints.weightx = 0.2;
+        fileButtonConstraints.insets = new Insets(0, 50, 0, 50);
+        fileButtonConstraints.gridx = 1;
         fileButtonConstraints.gridy = 0;
         rootPanel.add(fileButton, fileButtonConstraints);
 
         JButton clearButton = new JButton("Clear Outputs");
         GridBagConstraints clearButtonConstraints = new GridBagConstraints();
         clearButtonConstraints.fill=GridBagConstraints.BOTH;
-        clearButtonConstraints.weighty = 0.3;
-        clearButtonConstraints.weightx = 0.3;
+        clearButtonConstraints.weighty = 0.2;
+        clearButtonConstraints.weightx = 0.2;
+        clearButtonConstraints.insets = new Insets(0, 50, 0, 50);
         clearButtonConstraints.gridx = 1;
-        clearButtonConstraints.gridy = 3;
+        clearButtonConstraints.gridy = 2;
         rootPanel.add(clearButton, clearButtonConstraints);
 
         getResultsButton.addActionListener(e -> {
