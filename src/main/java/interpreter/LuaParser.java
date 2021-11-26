@@ -16,11 +16,19 @@ import java.util.stream.Collectors;
 //3)implementa in lua modulo con funzioni per creare gui in lua
 
 public class LuaParser {
-    private final LuaLibrary luaLibrary = Native.load("liblua.so", LuaLibrary.class);
-    private final Pointer L = luaLibrary.luaL_newstate();
-    private final LuaLibrary.luaL_Reg luaReg= new LuaLibrary.luaL_Reg();
+    private LuaLibrary luaLibrary;
+    private Pointer L;
+    private LuaLibrary.luaL_Reg luaReg;
+    private final String luaPath;
 
-    public LuaParser() {
+    public LuaParser(String luaPath) {
+        this.luaPath = luaPath;
+    }
+
+    public void initialize() {
+        luaLibrary = Native.load(luaPath, LuaLibrary.class);
+        L = luaLibrary.luaL_newstate();
+        luaReg = new LuaLibrary.luaL_Reg();
         luaLibrary.luaL_openlibs(L);
         passFunctionsToLua();
     }

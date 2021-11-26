@@ -22,7 +22,8 @@ public class LuaGui {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
         System.setOut(printStream);
-        LuaParser luaParser = new LuaParser();
+        LuaParser luaParser = new LuaParser("liblua.so");
+        luaParser.initialize();
 
         JFrame frame = new JFrame("LuaGui");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -7,7 +7,8 @@ import java.util.Scanner;
 public class LuaConsole {
 
     public static void main(String[] args) {
-        LuaParser luaParser = new LuaParser();
+        LuaParser luaParser = new LuaParser("liblua.so");
+        luaParser.initialize();
         Scanner scanner = new Scanner(System.in);
         System.out.println("Starting Lua, press q to quit");
         do {
