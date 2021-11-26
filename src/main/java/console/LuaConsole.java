@@ -3,12 +3,14 @@ package console;
 import interpreter.LuaParser;
 
 import java.util.Scanner;
+import java.util.function.Consumer;
 
 public class LuaConsole {
 
     public static void main(String[] args) {
-        LuaParser luaParser = new LuaParser("liblua.so");
-        luaParser.initialize();
+        Consumer<String> consumer = System.out::print;
+        LuaParser luaParser = new LuaParser(consumer);
+        luaParser.initialize("liblua.so");
         Scanner scanner = new Scanner(System.in);
         System.out.println("Starting Lua, press q to quit");
         do {

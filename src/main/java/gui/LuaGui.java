@@ -8,32 +8,20 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.PrintStream;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static java.lang.System.lineSeparator;
 
 public class LuaGui {
 
+    private static final String luaPath = "liblua.so";
 
     private static void createAndShowGUI() {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        PrintStream printStream = new PrintStream(outputStream);
-        System.setOut(printStream);
-        LuaParser luaParser = new LuaParser("liblua.so");
-        luaParser.initialize();
-
         JFrame frame = new JFrame("LuaGui");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 400);
-        frame.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                luaParser.closeLua();
-            }
-        });
 
         JPanel rootPanel = new JPanel(new GridBagLayout());
 
@@ -83,6 +71,10 @@ public class LuaGui {
         outputsLabelConstraints.gridy = 0;
         rootPanel.add(outputsLabel, outputsLabelConstraints);
 
+        Consumer<String> consumer = printResults::append;
+        LuaParser luaParser = new LuaParser(consumer);
+        luaParser.initialize(luaPath);
+
         JButton getResultsButton = new JButton("Get Results");
         GridBagConstraints getResultsButtonConstraints = new GridBagConstraints();
         getResultsButtonConstraints.fill=GridBagConstraints.BOTH;
@@ -117,13 +109,9 @@ public class LuaGui {
             String input = luaInputs.getText().trim();
             luaInputs.setText("");
             String output = luaParser.runCommands(input);
-            String print = outputStream.toString();
             printResults.append(input.lines().map(line -> "> " + line + lineSeparator()).collect(Collectors.joining()));
             if (!output.equals(""))
                 printResults.append(output + lineSeparator());
-            else if (!print.equals(""))
-                printResults.append(print);
-            outputStream.reset();
         });
 
         fileButton.addActionListener(e -> {
@@ -133,12 +121,8 @@ public class LuaGui {
             if (file != null) {
                 String output = luaParser.runFile(file.toString());
                 printResults.append("> " + file + lineSeparator());
-                String print = outputStream.toString();
                 if (!output.equals(""))
                     printResults.append(output + lineSeparator());
-                else if (!print.equals(""))
-                    printResults.append(print);
-                outputStream.reset();
             }
         });
 
@@ -151,6 +135,13 @@ public class LuaGui {
         });
 
         clearButton.addActionListener(e -> printResults.setText(""));
+
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                luaParser.closeLua();
+            }
+        });
 
         //Display the window.
         frame.getContentPane().add(rootPanel);

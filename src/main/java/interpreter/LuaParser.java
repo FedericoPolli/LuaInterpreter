@@ -5,6 +5,7 @@ import com.sun.jna.Pointer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 //pragmatic programmer
@@ -12,16 +13,19 @@ import java.util.stream.Collectors;
 //test end to end
 
 public class LuaParser {
+
+    private static final String EMPTY_RESULT = "";
+
     private LuaLibrary luaLibrary;
     private Pointer L;
     private LuaLibrary.luaL_Reg luaReg;
-    private final String luaPath;
+    private Consumer<String> consumer;
 
-    public LuaParser(String luaPath) {
-        this.luaPath = luaPath;
+    public LuaParser(Consumer<String> consumer) {
+        this.consumer = consumer;
     }
 
-    public void initialize() {
+    public void initialize(String luaPath) {
         luaLibrary = Native.load(luaPath, LuaLibrary.class);
         L = luaLibrary.luaL_newstate();
         luaReg = new LuaLibrary.luaL_Reg();
@@ -40,13 +44,12 @@ public class LuaParser {
         luaLibrary.lua_settop(L, -2);
     }
 
-    //fai in modo che luaparser riceva consumer stringhe, i.e. metodo che passi a luaparser e che aggiunge stringa a jtextarea
     private int myPrint(Pointer L) {
         int numberOfArgs = luaLibrary.lua_gettop(L);
         for (int i = 1; i <= numberOfArgs ; i++) {
-            System.out.print(luaLibrary.lua_tolstring(L, i, null) + " ");
+            consumer.accept(luaLibrary.lua_tolstring(L, i, null) + " ");
         }
-        System.out.println();
+        consumer.accept(System.lineSeparator());
         return 0;
     }
 
@@ -103,8 +106,7 @@ public class LuaParser {
         luaLibrary.lua_settop(L, 0);
         if (results.size() == 0) {
             return "";
-        }
-        else{
+        } else {
             String formattedResults = results.stream().map(result -> result + ", ").collect(Collectors.joining());
             return formattedResults.substring(0, formattedResults.length()-2);
         }
