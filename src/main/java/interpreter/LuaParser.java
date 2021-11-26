@@ -58,7 +58,7 @@ public class LuaParser {
     }
 
     //test only
-    public boolean isStackEmpty(){
+    protected boolean isStackEmpty(){
         return luaLibrary.lua_gettop(L) == 0;
     }
 
