@@ -13,7 +13,7 @@ class LuaParserTest {
     void parseNonLuaFile(){
         LuaParser luaParser = new LuaParser();
         String file = "/media/sf_Federico/Units/Quinto Anno/Tirocinio/Code/Java/LuaInterpreter/src/test/resources/random.py";
-        String output = luaParser.parseAndRunFile(file);
+        String output = luaParser.runFile(file);
         String error = "unexpected symbol near '['";
         assertAll(
                 () -> assertTrue(output.contains(error)),
@@ -25,7 +25,7 @@ class LuaParserTest {
     void parseExistingFile(){
         LuaParser luaParser = new LuaParser();
         String file = "/media/sf_Federico/Units/Quinto Anno/Tirocinio/Code/Java/LuaInterpreter/src/test/resources/luaScripts/helloscript.lua";
-        String output = luaParser.parseAndRunFile(file);
+        String output = luaParser.runFile(file);
         assertAll(
                 () -> assertEquals("", output),
                 () -> assertTrue(luaParser.isStackEmpty())
@@ -37,7 +37,7 @@ class LuaParserTest {
         LuaParser luaParser = new LuaParser();
         String command = "a=12";
         assertAll(
-                () -> assertEquals("", luaParser.parseAndRunCommands(command)),
+                () -> assertEquals("", luaParser.runCommands(command)),
                 () -> assertTrue(luaParser.isStackEmpty())
         );
     }
@@ -48,7 +48,7 @@ class LuaParserTest {
         String command = "a=1hg2";
         String error = "malformed number near '1h'";
         assertAll(
-                () -> assertTrue(luaParser.parseAndRunCommands(command).contains(error)),
+                () -> assertTrue(luaParser.runCommands(command).contains(error)),
                 () -> assertTrue(luaParser.isStackEmpty())
         );    }
 
@@ -57,7 +57,7 @@ class LuaParserTest {
         LuaParser luaParser = new LuaParser();
         String command = "12";
         assertAll(
-                () -> assertEquals(command, luaParser.parseAndRunCommands(command)),
+                () -> assertEquals(command, luaParser.runCommands(command)),
                 () -> assertTrue(luaParser.isStackEmpty())
         );    }
 
@@ -66,7 +66,7 @@ class LuaParserTest {
         LuaParser luaParser = new LuaParser();
         String command = "a=12"+System.lineSeparator()+"a*a";
         assertAll(
-                () -> assertEquals("144", luaParser.parseAndRunCommands(command)),
+                () -> assertEquals("144", luaParser.runCommands(command)),
                 () -> assertTrue(luaParser.isStackEmpty())
         );    }
 
@@ -76,7 +76,7 @@ class LuaParserTest {
         String command = "a=12"+System.lineSeparator()+"a*/*a";
         String error = "syntax error near '*'";
         assertAll(
-                () -> assertTrue(luaParser.parseAndRunCommands(command).contains(error)),
+                () -> assertTrue(luaParser.runCommands(command).contains(error)),
                 () -> assertTrue(luaParser.isStackEmpty())
         );    }
 
@@ -87,8 +87,8 @@ class LuaParserTest {
         String error1 = "malformed number near '1h'";
         String error2 = "syntax error near '*'";
         assertAll(
-                () -> assertTrue(luaParser.parseAndRunCommands(command).contains(error1)),
-                () -> assertTrue(luaParser.parseAndRunCommands(command).contains(error2)),
+                () -> assertTrue(luaParser.runCommands(command).contains(error1)),
+                () -> assertTrue(luaParser.runCommands(command).contains(error2)),
                 () -> assertTrue(luaParser.isStackEmpty())
         );    }
 
@@ -98,7 +98,7 @@ class LuaParserTest {
         String command = "1,2,3,4,5,6";
         String output = "1, 2, 3, 4, 5, 6";
         assertAll(
-                () -> assertEquals(output, luaParser.parseAndRunCommands(command)),
+                () -> assertEquals(output, luaParser.runCommands(command)),
                 () -> assertTrue(luaParser.isStackEmpty())
         );
     }
@@ -109,7 +109,7 @@ class LuaParserTest {
         System.setOut(new PrintStream(outputStream));
         LuaParser luaParser = new LuaParser();
         String command = "print(2)";
-        luaParser.parseAndRunCommands(command);
+        luaParser.runCommands(command);
         String expected = "2 "+System.lineSeparator();
         assertAll(
                 () -> assertEquals(expected, outputStream.toString()),
@@ -123,7 +123,7 @@ class LuaParserTest {
         System.setOut(new PrintStream(outputStream));
         LuaParser luaParser = new LuaParser();
         String command = "print(2,3,4,5,6)";
-        luaParser.parseAndRunCommands(command);
+        luaParser.runCommands(command);
         String expected = "2 3 4 5 6 "+System.lineSeparator();
         assertAll(
                 () -> assertEquals(expected, outputStream.toString()),

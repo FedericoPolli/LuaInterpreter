@@ -15,7 +15,7 @@ public class LuaConsole {
         String input = scanner.nextLine();
         if (input.equals("q"))
             break;
-        String output = luaParser.parseAndRunCommands(input);
+        String output = luaParser.runCommands(input);
         if (!output.equals(""))
             System.out.println(output);
         } while (true);
