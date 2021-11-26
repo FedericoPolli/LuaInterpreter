@@ -108,8 +108,8 @@ public class LuaGui {
         getResultsButton.addActionListener(e -> {
             String input = luaInputs.getText().trim();
             luaInputs.setText("");
-            String output = luaParser.runCommands(input);
             printResults.append(input.lines().map(line -> "> " + line + lineSeparator()).collect(Collectors.joining()));
+            String output = luaParser.runCommands(input);
             if (!output.equals(""))
                 printResults.append(output + lineSeparator());
         });
@@ -119,8 +119,8 @@ public class LuaGui {
             fileChooser.showOpenDialog(rootPanel);
             File file = fileChooser.getSelectedFile();
             if (file != null) {
-                String output = luaParser.runFile(file.toString());
                 printResults.append("> " + file + lineSeparator());
+                String output = luaParser.runFile(file.toString());
                 if (!output.equals(""))
                     printResults.append(output + lineSeparator());
             }

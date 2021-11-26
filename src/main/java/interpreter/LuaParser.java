@@ -19,7 +19,7 @@ public class LuaParser {
     private LuaLibrary luaLibrary;
     private Pointer L;
     private LuaLibrary.luaL_Reg luaReg;
-    private Consumer<String> consumer;
+    private final Consumer<String> consumer;
 
     public LuaParser(Consumer<String> consumer) {
         this.consumer = consumer;
@@ -105,7 +105,7 @@ public class LuaParser {
         }
         luaLibrary.lua_settop(L, 0);
         if (results.size() == 0) {
-            return "";
+            return EMPTY_RESULT;
         } else {
             String formattedResults = results.stream().map(result -> result + ", ").collect(Collectors.joining());
             return formattedResults.substring(0, formattedResults.length()-2);
